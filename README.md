@@ -15,3 +15,62 @@ Primarilly this site will host a variety of tools. Currently the following have 
 - DNS Query
 
 More will be on the way!
+
+## Installation Instructions
+
+These instructions assume you are using a Linux Distribution which has been released in the past 2 years.
+
+### Prerequisites
+
+To install this program you must have the following:
+
+- Python 3.6 or newer
+- A MongoDB Instance Setup
+
+## Installation
+
+1. Clone this Repository and Enter It
+
+```sh
+git clone https://github.com/MattLimb/limbtips.git /opt/limbtips
+
+cd /opt/limbtips
+```
+
+2. Setup Virtual Environment (`venv`) and Enter It
+
+```sh
+python3 -m venv env/
+```
+
+```sh
+source env/bin/activate
+```
+
+__NOTE__: Please use whichever Virtual Environment you feel most comfortable with. This step is also skippable.
+
+__NOTE__: The rest of this guide assumes you are using a Virtual Environment which maps the `python` command to your Python3 Virtual Environment instance.
+
+3. Install Python Requirements
+
+```sh
+python -m pip install -r requirements.txt
+```
+
+4. Edit Config File:
+
+Add your MongoDB configuration to the `limbtips/config/limbtips.yaml` like so:
+
+```yaml
+mongodb:
+  host: <host_ip>
+  port: <host_port>
+```
+
+5. Run `limb.tips`:
+
+```sh
+python -m limbtips
+```
+
+__NOTE__: If you have changed the location of the install, please ensure you are running this command from the folder with this `READEME.md` in it. 
