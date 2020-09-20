@@ -79,24 +79,15 @@
                         </div>
                         <select class="custom-select" id="dns" name="dns" required>
                             <option disabled {% if not args %}selected{% endif %}>DNS Server...</option>
-                            <option value="8.8.8.8" {% if args %}{% if args["dns"] == "8.8.8.8" %}selected{% endif %}{% endif %}>8.8.8.8 - Google DNS</option>
-                            <option value="8.8.4.4" {% if args %}{% if args["dns"] == "8.8.4.4" %}selected{% endif %}{% endif %}>4.4.4.4 - Google DNS Alternative</option>
-                            <option value="1.1.1.1" {% if args %}{% if args["dns"] == "1.1.1.1" %}selected{% endif %}{% endif %}>1.1.1.1 - Cloudflare DNS</option>
-                            <option value="1.0.0.1" {% if args %}{% if args["dns"] == "1.0.0.1" %}selected{% endif %}{% endif %}>1.0.0.1 - Cloudflare DNS Alternative</option>
-                            <option value="208.67.222.222" {% if args %}{% if args["dns"] == "208.67.222.222" %}selected{% endif %}{% endif %}>208.67.222.222 - Cisco OpenDNS</option>
-                            <option value="208.67.220.220" {% if args %}{% if args["dns"] == "208.67.220.220" %}selected{% endif %}{% endif %}>208.67.220.220 - Cisco OpenDNS Alternative</option>
-                            <option value="9.9.9.9" {% if args %}{% if args["dns"] == "9.9.9.9" %}selected{% endif %}{% endif %}>9.9.9.9 - Quad9 DNS</option>
-                            <option value="149.112.112.112" {% if args %}{% if args["dns"] == "149.112.112.112" %}selected{% endif %}{% endif %}>149.112.112.112 - Quad9 DNS Alternative</option>
-                            <option value="8.26.56.26" {% if args %}{% if args["dns"] == "8.26.56.26" %}selected{% endif %}{% endif %}>8.26.56.26 - Comodo DNS</option>
-                            <option value="8.20.247.20" {% if args %}{% if args["dns"] == "8.20.247.20" %}selected{% endif %}{% endif %}>8.20.247.20 - Comodo DNS Alternative</option>
-                            <option value="64.6.64.6" {% if args %}{% if args["dns"] == "64.6.64.6" %}selected{% endif %}{% endif %}>64.6.64.6 - Verisign DNS</option>
-                            <option value="64.6.65.6" {% if args %}{% if args["dns"] == "64.6.65.6" %}selected{% endif %}{% endif %}>64.6.65.6 - Verisign DNS Alternative</option>
-                            <option value="176.103.130.130" {% if args %}{% if args["dns"] == "176.103.130.130" %}selected{% endif %}{% endif %}>176.103.130.130 - AdGaurd Default DNS</option>
-                            <option value="176.103.130.131" {% if args %}{% if args["dns"] == "176.103.130.131" %}selected{% endif %}{% endif %}>176.103.130.131 - AdGaurd Default DNS Alternative</option>
-                            <option value="176.103.130.132" {% if args %}{% if args["dns"] == "176.103.130.132" %}selected{% endif %}{% endif %}>176.103.130.132 - AdGaurd Family DNS</option>
-                            <option value="176.103.130.134" {% if args %}{% if args["dns"] == "176.103.130.134" %}selected{% endif %}{% endif %}>176.103.130.134 - AdGaurd Family DNS Alternative</option>
-                            <option value="176.103.130.136" {% if args %}{% if args["dns"] == "176.103.130.136" %}selected{% endif %}{% endif %}>176.103.130.136 - AdGaurd Non-Blocking DNS</option>
-                            <option value="176.103.130.137" {% if args %}{% if args["dns"] == "176.103.130.137" %}selected{% endif %}{% endif %}>176.103.130.137 - AdGaurd Non-Blocking DNS Alternative
+                            <option value="google" {% if args %}{% if args["dns"].lower() == "google" %}selected{% endif %}{% endif %}>Google DNS</option>
+                            <option value="cloudflare" {% if args %}{% if args["dns"].lower() == "cloudflare" %}selected{% endif %}{% endif %}>Cloudflare DNS</option>
+                            <option value="opendns" {% if args %}{% if args["dns"].lower() == "opendns" %}selected{% endif %}{% endif %}>Cisco OpenDNS</option>
+                            <option value="quad9" {% if args %}{% if args["dns"].lower() == "quad9" %}selected{% endif %}{% endif %}>Quad9 DNS</option>
+                            <option value="comodo" {% if args %}{% if args["dns"].lower() == "comodo" %}selected{% endif %}{% endif %}>Comodo DNS</option>
+                            <option value="verisign" {% if args %}{% if args["dns"].lower() == "verisign" %}selected{% endif %}{% endif %}>Verisign DNS</option>
+                            <option value="adgaurd_default" {% if args %}{% if args["dns"].lower() == "adgaurd_default" %}selected{% endif %}{% endif %}>AdGaurd Default DNS</option>
+                            <option value="adgaurd_family" {% if args %}{% if args["dns"].lower() == "adgaurd_family" %}selected{% endif %}{% endif %}>AdGaurd Family DNS</option>
+                            <option value="adgaurd_non" {% if args %}{% if args["dns"].lower() == "adgaurd_non" %}selected{% endif %}{% endif %}>AdGaurd Non-Blocking DNS</option>
                             </option>
                         </select>
                     </div>
