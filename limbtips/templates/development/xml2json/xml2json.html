@@ -1,0 +1,81 @@
+{% extends "global_base.html" %}
+
+{% block custom_stylesheets %}
+<link rel="stylesheet" href="/static/css/syntax.css">
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/development/">Development Tools</a></li>
+        <li class="breadcrumb-item active" aria-current="page">xml2json Tool</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success d-none" role="alert" id="success_alert">
+    JSON copied to clipboard!
+</div>
+
+<div class="alert alert-danger d-none" role="alert" id="error_alert">
+    Something went wrong.
+</div>
+
+<div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
+    <div class="col"></div>
+    <div class="col">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                xml2json Tool
+            </div>
+            <div class="card-body">
+                <form action="/development/xml2json/" method="POST">
+                    <div class="form-group">
+                        <label for="xml_input">Input XML Below</label>
+                        <textarea class="form-control" id="xml_input" name="xml_input" rows="20" {% if result %}value="{{ raw_xml }}"{% endif %}></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Convert to JSON</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+{% if result %}
+<div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
+    <div class="col"></div>
+    <div class="col">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                JSON Output
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" style="width: 100%;" onclick="to_clipboard()">Copy To
+                    Clipboard</button>
+                {{ result }}
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+<script>
+    var copy_text = {{ copy_text| tojson }};
+
+    function to_clipboard() {
+        navigator.clipboard.writeText(JSON.stringify(copy_text)).then(function () {
+            document.getElementById("success_alert").classList.remove("d-none");
+            document.getElementById("success_alert").classList.add("d-block");
+        }, function () {
+            document.getElementById("error_alert").classList.remove("d-none");
+            document.getElementById("error_alert").classList.add("d-block");
+        });
+    }
+
+</script>
+
+{% endif %}
+
+{% endblock %}
