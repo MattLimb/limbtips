@@ -8,19 +8,40 @@ import markdown
 
 def xml2json(_element):
     element_json = dict(
-        tag=_element.tag,
-        attributes=_element.attrib,
-        text=str(),
+        namespace=None,
+        tag=None,
+        attributes=dict(),
+        text=None,
         children=list()
     )
-    if _element.text != "\n ":
-        for child_element in list(_element):
-            element_json["children"].append(xml2json(child_element))
+
+    for attrib_tag, attrib_value in _element.attrib.items():
+        attrib = dict(
+            namespace=None,
+            value=attrib_value
+        )
+
+        attrib_tag = str(attrib_tag).split("}")
+
+        if len(attrib_tag) > 1:
+            attrib["namespace"] = attrib_tag[0][1::]
+            attrib_tag = [ attrib_tag[1] ]
         
-    if len(element_json["children"]) != 0:
-        element_json["text"] = None
+        element_json["attributes"][attrib_tag[0]] = attrib
+
+    tmp_tag = str(_element.tag).split("}")
+
+    if len(tmp_tag) == 1:
+        element_json["tag"] = tmp_tag[0]
     else:
-        element_json["text"] = _element.text
+        element_json["namespace"] = tmp_tag[0][1::]
+        element_json["tag"] = tmp_tag[1]
+
+    for child_element in list(_element):
+        element_json["children"].append(xml2json(child_element))
+
+    if len(element_json["children"]) == 0:
+        element_json["text"] = str(_element.text).strip()
 
     return element_json
 

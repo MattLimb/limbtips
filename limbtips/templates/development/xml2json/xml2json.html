@@ -33,7 +33,7 @@
                 <form action="/development/xml2json/" method="POST">
                     <div class="form-group">
                         <label for="xml_input">Input XML Below</label>
-                        <textarea class="form-control" id="xml_input" name="xml_input" rows="20" {% if result %}value="{{ raw_xml }}"{% endif %}></textarea>
+                        <textarea class="form-control" id="xml_input" name="xml_input" rows="20">{% if result %}{{ raw_xml }}"{% endif %}</textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Convert to JSON</button>
                 </form>
@@ -45,8 +45,8 @@
 
 {% if result %}
 <div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
-    <div class="col"></div>
-    <div class="col">
+    <div class="col col-md-2"></div>
+    <div class="col col-md-8">
         <div class="card" style="width: 100%;">
             <div class="card-header">
                 JSON Output
@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-    <div class="col"></div>
+    <div class="col col-md-2"></div>
 </div>
 
 <script>
