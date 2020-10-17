@@ -6,5 +6,5 @@ main = Blueprint("main", __name__)
 
 mongo_client = MongoClient("mongodb://{}:{}/".format(config["mongodb"]["host"], config["mongodb"]["port"]))
 
-from . import base, development, blog
+from . import base, development, blog, charts
 

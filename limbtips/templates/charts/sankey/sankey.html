@@ -1,0 +1,249 @@
+{% extends "global_base.html" %}
+
+{% block custom_stylesheets %}
+<!-- Google Script -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- Dom To Image Scripts -->
+<script type="text/javascript" src="/static/js/html2canvas/html2canvas.min.js"></script>
+<script type="text/javascript" src="/static/js/filesaver/FileSaver.js"></script>
+<!-- Custom Sankey JS -->
+<script type="text/javascript" src="/static/js/charts/sankey/sankey.js"></script>
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/charts/">Charts</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Sankey</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
+    <div class="col col-md-2"></div>
+    <div class="col col-md-8">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                Sankey Diagram
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" style="vertical-align: middle;" onclick="SaveSankey();">Save
+                    Sankey</button>
+                <select class="custom-select" id="width_selector" style="width: auto; margin-left: 1%;"
+                    onchange="drawChart();">
+                    <option selected value="default">Auto Width (Screen Size)</option>
+                    <option value="600">W: 600 Pixels</option>
+                    <option value="700">W: 700 Pixels</option>
+                    <option value="800">W: 800 pixels</option>
+                    <option value="900">W: 900 pixels</option>
+                    <option value="1000">W: 1000 pixels</option>
+                    <option value="1100">W: 1100 pixels</option>
+                    <option value="1200">W: 1200 Pixels</option>
+                </select>
+                <select class="custom-select" id="height_selector" style="width: auto; margin-left: 1%;"
+                    onchange="drawChart();">
+                    <option selected value="200">Default Height (200 Pixels)</option>
+                    <option value="220">H: 220 Pixels</option>
+                    <option value="240">H: 240 Pixels</option>
+                    <option value="260">H: 260 pixels</option>
+                    <option value="280">H: 280 pixels</option>
+                    <option value="300">H: 300 pixels</option>
+                    <option value="320">H: 320 pixels</option>
+                    <option value="340">H: 340 Pixels</option>
+                    <option value="360">H: 360 Pixels</option>
+                    <option value="380">H: 380 Pixels</option>
+                    <option value="400">H: 400 Pixels</option>
+                    <option value="500">H: 500 Pixels</option>
+                    <option value="600">H: 600 Pixels</option>
+                    <option value="700">H: 700 Pixels</option>
+
+                </select>
+                <select class="custom-select" id="theme_selector" style="width: auto; margin-left: 1%;"
+                    onchange="drawChart();">
+                    <option selected value="default">Default Theme</option>
+                    <option value="colorful">Colorful Theme</option>
+                    <option value="blue">Blue Theme</option>
+                    <option value="purple">Purple Theme</option>
+                    <option value="red">Red Theme</option>
+                    <option value="green">Green Theme</option>
+                    <option value="orange">Orange Theme</option>
+                    <option value="gray">Gray Theme</option>
+                </select>
+                <select class="custom-select" id="mode_selector" style="width: auto; margin-left: 1%;"
+                    onchange="drawChart();">
+                    <option selected value="none">Default Mode</option>
+                    <option value="source">Source Mode</option>
+                    <option value="target">Target Mode</option>
+                    <option value="gradient">Gradient Mode</option>
+
+                </select>
+            </div>
+            <div class="card-body" id="the-body">
+                <div style="width: 100%; height: 100%;" id="sankey_multiple"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+<div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
+    <div class="col col-md-3"></div>
+    <div class="col col-md-6">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="dataInputSelector" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="table-data-tab" data-toggle="tab" href="#table-data" role="tab"
+                            aria-controls="table-data" aria-selected="true">Sankey Table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="csv-data-tab" data-toggle="tab" href="#csv-data" role="tab"
+                            aria-controls="csv-data">CSV Upload</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content" id="dataInputSelectorContent">
+                <div class="tab-pane fade show active" id="table-data" role="tabpanel" aria-labelledby="table-data-tab">
+                    <div class="card-body">
+                        <button class="btn btn-primary" onclick="SaveToCSV();">Save to CSV</button>
+                    </div>
+                    <table class="table table-striped text-center" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <td style="width: 20%; border-top: 0;">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Start Node"
+                                            id="start_node">
+                                    </div>
+                                </td>
+                                <td style="width: 20%; border-top: 0;">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="End Node" id="end_node">
+                                    </div>
+                                </td>
+                                <td style="width: 15%; border-top: 0;">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Weight" id="weight">
+                                    </div>
+                                </td>
+                                <td style="width: 15%; border-top: 0;">
+                                    <button class="btn btn-primary" onclick="AddToTable();">Add</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 30%; border-top: 0;">Start Node</th>
+                                <th style="width: 30%; border-top: 0;">End Node</th>
+                                <th style="width: 30%; border-top: 0;">Weight</th>
+                                <th style="width: 10%; border-top: 0;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table_body">
+                            <tr id="e1bw54ef1v">
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">Brazil</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">Portugal</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">5</td>
+                                <td style="width: 10%; border-top: 0; vertical-align: middle;">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button class="btn btn-primary" style="vertical-align: middle;"
+                                            onclick="EditRow('e1bw54ef1v');">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                class="bi bi-pencil-square" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-danger" style="vertical-align: middle;"
+                                            onclick="DeleteRow('e1bw54ef1v');"><svg width="1em" height="1em"
+                                                viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                                            </svg></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="4oyt6p4zm0">
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">Brazil</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">France</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">1</td>
+                                <td style="width: 10%; border-top: 0; vertical-align: middle;">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button class="btn btn-primary" style="vertical-align: middle;"
+                                            onclick="EditRow('4oyt6p4zm0');">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                class="bi bi-pencil-square" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-danger" style="vertical-align: middle;"
+                                            onclick="DeleteRow('4oyt6p4zm0');"><svg width="1em" height="1em"
+                                                viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                                            </svg></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="yngi7em5ma">
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">Brazil</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">Spain</td>
+                                <td style="width: 30%; border-top: 0; vertical-align: middle;">1</td>
+                                <td style="width: 10%; border-top: 0; vertical-align: middle;">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button class="btn btn-primary" style="vertical-align: middle;"
+                                            onclick="EditRow('yngi7em5ma');">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                class="bi bi-pencil-square" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-danger" style="vertical-align: middle;"
+                                            onclick="DeleteRow('yngi7em5ma');"><svg width="1em" height="1em"
+                                                viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                                            </svg></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="csv-data" role="tabpanel" aria-labelledby="csv-data-tab">
+                    <div class="input-group mb-3">
+                        <div class="card-body">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="input-csv" aria-describedby="csv-label"
+                                    accept=".csv" onchange="ChangeUploadLabel()">
+                                <label class="custom-file-label" id="csv-label" for="input-csv">Choose CSV file</label>
+                                <button id="csv-button" class="btn btn-primary mt-2" style="vertical-align: middle;"
+                                    onclick="ParseUpload();" disabled aria-disabled="true">Parse CSV</button>
+                                <div id="out">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-auto" id="test">
+
+    </div>
+</div>
+
+{% endblock %}
