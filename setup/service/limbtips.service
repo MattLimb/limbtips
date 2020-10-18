@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 # Another Type: forking
-User=nanodano
+User=limbtips
 WorkingDirectory=/home/limbtips/
 ExecStart=gunicorn -w 4 limbtips:app
 Restart=on-failure
