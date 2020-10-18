@@ -31,9 +31,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link {% if 'blog' in active_page %}active{% endif %}"" href="/blog/">Blog</a>
-                </li>
+                </li>-->
                 <li class="nav-item dropdown {% if 'development' in active_page %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="/development/" id="developmentTools" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -41,7 +41,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="developmentTools">
                         <a class="dropdown-item {% if 'development.dns' == active_page %}active{% endif %}" href="/development/dns/">DNS Tool{% if 'development.dns' == active_page %}<span class="sr-only">(current)</span>{% endif %}</a>
-                        <a class="dropdown-item {% if 'development.virus' == active_page %}active{% endif %}" href="/development/virus/">Virus Tool{% if 'development.virus' == active_page %}<span class="sr-only">(current)</span>{% endif %}</a>
+                        <!--<a class="dropdown-item {% if 'development.virus' == active_page %}active{% endif %}" href="/development/virus/">Virus Tool{% if 'development.virus' == active_page %}<span class="sr-only">(current)</span>{% endif %}</a>-->
                         <a class="dropdown-item {% if 'development.xml2json' == active_page %}active{% endif %}" href="/development/xml2json/">xml2json Tool{% if 'development.xml2json' == active_page %}<span class="sr-only">(current)</span>{% endif %}</a>
                     </div>
                 </li>

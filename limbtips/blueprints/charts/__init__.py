@@ -1,2 +1,2 @@
-from .. import main, mongo_client
+from .. import main
 from . import _charts, _sankey
