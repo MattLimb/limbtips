@@ -7,7 +7,7 @@ Type=simple
 # Another Type: forking
 User=limbtips
 WorkingDirectory=/home/limbtips/limbtips/
-ExecStart=gunicorn -w 4 limbtips:app
+ExecStart=python3 -m limbtips
 Restart=on-failure
 # Other restart options: always, on-abort, etc
 
