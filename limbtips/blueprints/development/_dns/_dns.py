@@ -28,7 +28,7 @@ def lt_dns():
             answer = resolver.query(args.get("domain"), args.get("record"))   
             return render_template("development/dns/dns_page.html", active_page="development.dns", result=answer.response, args=args)
         except resolver.NoNameservers:
-            error = f"{dns_servers.sentence()} could not find this address."
+            error = f"{dns_servers.title()} could not find this address."
             return render_template("development/dns/dns_page.html", active_page="development.dns", error=error, args=args)
         except Exception:
             return render_template("development/dns/dns_page.html", active_page="development.dns", error="Request Returned No Results", args=args)
