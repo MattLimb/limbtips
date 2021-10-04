@@ -5,4 +5,4 @@ from . import main
 
 @main.route("/", methods=["GET"])
 def lt_base():
-    return render_template("base/home_content.html")
+    return render_template("base/home_content.html", active_page="home")

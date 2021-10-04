@@ -1,6 +1,4 @@
-from dns.message import Message
-from dns.resolver import reset_default_resolver, resolve
-from flask import request, render_template, jsonify
+from flask import request, render_template
 from dns import resolver
 from . import main
 
@@ -20,16 +18,19 @@ nameserver_listings = {
 
 @main.route("/development/dns/", methods=["GET"])
 def lt_dns():
-    args = request.args 
+    args = request.args
+    dns_servers = args.get("dns", "google").lower()
     if args:
         res = resolver.Resolver(configure=False)
-        res.nameservers = nameserver_listings[args.get("dns").lower()]
+        res.nameservers = nameserver_listings.get(dns_servers)
 
         try:
-            answer = resolver.query(args.get("domain"),  args.get("record"))            
-            
+            answer = resolver.query(args.get("domain"), args.get("record"))   
             return render_template("development/dns/dns_page.html", active_page="development.dns", result=answer.response, args=args)
-        except resolver.NoAnswer:
-            return render_template("development/dns/dns_page.html", active_page="development.dns", result="Request Returned No Results", args=args)
+        except resolver.NoNameservers:
+            error = f"{dns_servers.sentence()} could not find this address."
+            return render_template("development/dns/dns_page.html", active_page="development.dns", error=error, args=args)
+        except Exception:
+            return render_template("development/dns/dns_page.html", active_page="development.dns", error="Request Returned No Results", args=args)
     else:
         return render_template("development/dns/dns_page.html", active_page="development.dns")

@@ -10,10 +10,17 @@ def load_config(location="limbtips/config/limbtips.yaml"):
 
 config = load_config()
 
-def create_app(debug=False):
+def create_app():
     """Create an instance of the application."""
     app = Flask(__name__)
-    app.debug = debug
+
+    server = config.get('server', {})
+
+    app.debug = server.get('debug', False)
+    app.config['SERVER_NAME'] = "{host}:{port}".format(
+        host=server.get("host", "127.0.0.1"),
+        port=server.get("port", 5000)
+    )
     app.config['SECRET_KEY'] = os.urandom(10)
 
     from .blueprints import main

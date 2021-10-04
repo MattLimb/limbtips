@@ -119,6 +119,23 @@
 </div>
 {% endif %}
 
+{% if error %}
+<div class="mt-4 row row-cols-1 row-cols-sm-1 row-cols-md-3">
+    <div class="col"></div>
+    <div class="col">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                DNS Error
+            </div>
+            <div class="card-body">
+                <pre class="m-auto" style="background: #f3f3f3; padding: .75rem 1.25rem; border-radius: calc(.25rem - 1pxcalc(.25rem - 1px) 0 0;">{{ error }}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+{% endif %}
+
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
     (function () {
