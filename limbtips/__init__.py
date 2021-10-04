@@ -10,7 +10,7 @@ def load_config(location="limbtips/config/limbtips.yaml"):
 
 config = load_config()
 
-def create_app():
+def create_app(*args, **kwargs):
     """Create an instance of the application."""
     app = Flask(__name__)
 
