@@ -1,5 +1,4 @@
 from limbtips import create_app, config
-#import waitress
 
 app = create_app()
 

@@ -7,7 +7,7 @@ Type=simple
 # Another Type: forking
 User=limbtips
 WorkingDirectory=/home/limbtips/limbtips/
-ExecStart=/home/limbtips/limbtips/env/bin/gunicorn --workers 4 --bind "127.0.0.1:5000" "limbtips:create_app"
+ExecStart=/home/limbtips/limbtips/env/bin/gunicorn --workers 4 --bind "127.0.0.1:5000" "wsgi:app"
 Restart=on-failure
 # Other restart options: always, on-abort, etc
 
